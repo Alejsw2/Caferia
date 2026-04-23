@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caferia - Luxury Coffee & Dessert</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --primary: #d4a373;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text: #ffffff;
+    --success: #25d366;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+html, body { width: 100%; margin: 0; padding: 0; background: #000; color: var(--text); overflow-x: hidden; }
+
+/* ANIMASI */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+.fade-in { animation: fadeInUp 0.8s ease forwards; }
+.float-anim { animation: float 4s ease-in-out infinite; }
+.modal-anim { animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+.btn-anim { transition: transform 0.1s; cursor: pointer; }
+.btn-anim:active { transform: scale(0.92); }
+
+.card-anim { transition: 0.3s; }
+.card-anim:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+
+/* UI */
+.page-background {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1600&q=80') center/cover;
+    z-index: -1; filter: blur(10px) brightness(0.3); transform: scale(1.1);
+}
+
+nav { position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; z-index: 9999 !important; padding: 15px 5%; pointer-events: none; }
+.nav-content { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(20px); padding: 10px 25px; border-radius: 50px; border: 1px solid var(--glass-border); pointer-events: auto; }
+
+main { margin-top: 80px; }
+.logo { font-size: 24px; font-weight: 800; }
+.logo span { color: var(--primary); }
+
+.search-bar { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 5px 15px; width: 35%; display: flex; align-items: center; }
+.search-bar input { background: transparent; border: none; color: white; width: 100%; outline: none; padding: 5px; }
+.search-bar button { background: transparent; border: none; color: var(--primary); }
+
+.hero { min-height: 80vh; display: flex; align-items: center; padding: 40px 5%; }
+.hero-container { display: flex; align-items: center; padding: 40px; gap: 40px; width: 100%; background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 24px; }
+.hero h1 { font-size: 3.5rem; line-height: 1.1; }
+.hero h1 span { color: var(--primary); }
+.hero-image img { width: 100%; max-width: 450px; border-radius: 30px; }
+
+.menu-filters { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+.filter-btn { background: var(--glass); border: 1px solid var(--glass-border); padding: 10px 25px; border-radius: 30px; color: white; font-weight: 600; }
+.filter-btn.active { background: var(--primary); color: black; border-color: var(--primary); }
+
+.menu-section { padding: 40px 5%; }
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.glass-card { background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 24px; overflow: hidden; }
+.item-img { height: 220px; background-size: cover; background-position: center; border-radius: 24px; }
+.item-info { padding: 20px; text-align: center; }
+.price { font-size: 1.2rem; font-weight: bold; color: var(--primary); margin: 10px 0; }
+
+.btn-primary, .checkout-btn { background: var(--primary); border: none; padding: 12px 30px; border-radius: 12px; font-weight: bold; color: black; }
+.icon-btn { background: transparent; border: none; color: white; font-size: 24px; margin-left: 15px; }
+
+.sidebar { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background: rgba(0,0,0,0.95); z-index: 100000; transition: 0.4s; padding: 40px; }
+.sidebar.active { right: 0; }
+.sidebar-links a { color: white; text-decoration: none; display: block; margin-bottom: 20px; cursor: pointer; }
+
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100001; }
+.modal-content { padding: 40px; width: 90%; max-width: 600px; text-align: center; border-radius: 30px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); }
+#modalBody { max-height: 65vh; overflow-y: auto; margin: 20px 0; padding: 10px; }
+
+.payment-methods { display: flex; gap: 10px; margin: 15px 0; }
+.method-card { flex: 1; padding: 10px; border: 1px solid var(--glass-border); border-radius: 10px; cursor: pointer; }
+.method-card.active { border-color: var(--primary); background: rgba(212,163,115,0.2); }
+#qrisArea { display: none; margin-top: 15px; }
+
+.toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: var(--primary); color: black; padding: 12px 30px; border-radius: 50px; font-weight: bold; z-index: 1000000; transition: 0.5s ease; }
+.toast.show { top: 30px; }
+
+/* HALAMAN AWAL */
+.welcome-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000;
+    z-index: 9999999; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.welcome-screen.hide { opacity: 0; visibility: hidden; transform: scale(1.1); }
+.welcome-content { text-align: center; }
+.logo-welcome { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 5px; }
+.logo-welcome span { color: #d4a373; }
+.welcome-text { font-size: 2.5rem; font-weight: 800; letter-spacing: 5px; color: #fff; text-align: center; }
+.welcome-subtext { color: #fff; opacity: 0.5; font-size: 0.9rem; font-style: italic; margin-top: 15px; animation: pulse 2s infinite; text-align: center; }
+@keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.1; } }
+
+/* --- PERBAIKAN FINAL IKON PELAYAN (ANTI-KOTAK SILANG) --- */
+
+/* 1. Sembunyikan ikon mobil dan jam lama di riwayat */
+#modalBody i.fa-shipping-fast, 
+#modalBody i.fa-clock {
+    display: none !important;
+}
+
+/* 2. Munculkan ikon pelayan baru menggunakan Masking SVG */
+#modalBody div[style*="background: rgba(37, 211, 102, 0.1)"] div:first-child::before {
+    content: ""; 
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-color: var(--success);
+    /* Memanggil SVG pelayan berbaju rapi langsung dari FontAwesome */
+    -webkit-mask: url('https://raw.githubusercontent.com/fortawesome/Font-Awesome/6.x/svgs/solid/user-tie.svg') no-repeat center;
+    mask: url('https://raw.githubusercontent.com/fortawesome/Font-Awesome/6.x/svgs/solid/user-tie.svg') no-repeat center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+</style>
+</head>
+<body>
+
+    <div id="welcomeScreen" class="welcome-screen" onclick="enterHome()">
+        <div class="welcome-content">
+            <div class="logo-welcome">CAFERIA<span>.</span></div>
+            <h1 class="welcome-text">WELCOME</h1>
+            <p class="welcome-subtext">Ketuk untuk masuk</p>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <div class="page-background"></div>
+
+    <nav>
+        <div class="nav-content">
+            <div class="logo">CAFERIA<span>.</span></div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Cari menu..." onkeyup="handleSearch()">
+                <button class="btn-anim"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-actions">
+                <button class="icon-btn btn-anim" onclick="openProfile()"><i class="fas fa-user-circle"></i></button>
+                <button class="icon-btn btn-anim" id="menuBtn"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-close btn-anim" id="closeBtn">&times;</div>
+        <div class="sidebar-links">
+            <a onclick="location.reload()" class="btn-anim"><i class="fas fa-home"></i> HOME</a>
+            <a onclick="showHistory()" class="btn-anim"><i class="fas fa-receipt"></i> Riwayat</a>
+            <a onclick="showPromo()" class="btn-anim"><i class="fas fa-percentage"></i> Promo</a>
+            <a onclick="showCS()" class="btn-anim"><i class="fas fa-headset"></i> CS</a>
+            <hr style="opacity: 0.1; margin: 10px 0;">
+            <a onclick="confirmLogout()" class="btn-anim" style="color: #ff4d4d;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <main class="fade-in">
+        <header class="hero">
+            <div class="hero-container">
+                <div class="hero-text">
+                    <h1>Nikmati Simfoni <br><span>Rasa & Aroma</span></h1>
+                    <p>Kopi pilihan dan hidangan penutup premium.</p>
+                    <button class="btn-primary btn-anim" onclick="scrollToMenu()">Eksplor Menu</button>
+                </div>
+                <div class="hero-image float-anim"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600"></div>
+            </div>
+        </header>
+
+        <section id="menu" class="menu-section">
+            <h2 style="text-align: center; margin-bottom: 25px; font-size: 2rem;">Menu Kami</h2>
+            <div class="menu-filters">
+                <button class="filter-btn active btn-anim" onclick="filterMenu('all')">Semua</button>
+                <button class="filter-btn btn-anim" onclick="filterMenu('makanan')">Makanan</button>
+                <button class="filter-btn btn-anim" onclick="filterMenu('minuman')">Minuman</button>
+                <button class="filter-btn btn-anim" onclick="filterMenu('cemilan')">Cemilan</button>
+            </div>
+
+            <div class="menu-grid" id="menuGrid">
+                <div class="glass-card menu-item card-anim" data-category="minuman">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=500')"></div>
+                    <div class="item-info"><h3>Midnight Espresso</h3><p class="price">Rp 25.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Midnight Espresso', 25000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="minuman">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=500')"></div>
+                    <div class="item-info"><h3>Caramel Macchiato</h3><p class="price">Rp 35.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Caramel Macchiato', 35000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="minuman">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=500')"></div>
+                    <div class="item-info"><h3>Matcha Latte</h3><p class="price">Rp 32.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Matcha Latte', 32000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="minuman">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500')"></div>
+                    <div class="item-info"><h3>Tropical Sunrise</h3><p class="price">Rp 28.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Tropical Sunrise', 28000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="minuman">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1577805947697-89e18249d767?w=500')"></div>
+                    <div class="item-info"><h3>Sweet Coklat Cheese</h3><p class="price">Rp 30.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Sweet Coklat Cheese', 30000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="minuman">
+                    <div class="item-img" style="background-image: url('https://tasteofnusa.com/wp-content/uploads/2023/11/iced-lychee-tea-3.jpg')"></div>
+                    <div class="item-info"><h3>Iced Lychee Tea</h3><p class="price">Rp 24.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Iced Lychee Tea', 24000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="minuman">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1534353473418-4cfa6c56fd38?w=500')"></div>
+                    <div class="item-info"><h3>Lemonade Breeze</h3><p class="price">Rp 26.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Lemonade Breeze', 26000)">Pesan</button></div>
+                </div>
+
+                <div class="glass-card menu-item card-anim" data-category="makanan">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500')"></div>
+                    <div class="item-info"><h3>Signature Bowl</h3><p class="price">Rp 45.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Signature Bowl', 45000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="makanan">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500')"></div>
+                    <div class="item-info"><h3>Cheesy Pizza</h3><p class="price">Rp 55.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Cheesy Pizza', 55000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="makanan">
+                    <div class="item-img" style="background-image: url('https://asset.kompas.com/crops/HuK6cKw7v63QblOXweXYra98TZw=/0x0:1000x667/1200x800/data/photo/2021/11/02/6180ba721d17b.jpeg')"></div>
+                    <div class="item-info"><h3>Beef Lasagna</h3><p class="price">Rp 65.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Beef Lasagna', 65000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="makanan">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500')"></div>
+                    <div class="item-info"><h3>Truffle Burger</h3><p class="price">Rp 75.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Truffle Burger', 75000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="makanan">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=500')"></div>
+                    <div class="item-info"><h3>Caesar Salad</h3><p class="price">Rp 40.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Caesar Salad', 40000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="makanan">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500')"></div>
+                    <div class="item-info"><h3>Grilled Salmon</h3><p class="price">Rp 95.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Grilled Salmon', 95000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="makanan">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?w=500')"></div>
+                    <div class="item-info"><h3>BBQ Short Ribs</h3><p class="price">Rp 120.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('BBQ Short Ribs', 120000)">Pesan</button></div>
+                </div>
+
+                <div class="glass-card menu-item card-anim" data-category="cemilan">
+                    <div class="item-img" style="background-image: url('https://www.kuchpakrahahai.in/wp-content/uploads/2023/05/Air-fried-french-fries.jpg')"></div>
+                    <div class="item-info"><h3>French Fries</h3><p class="price">Rp 20.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('French Fries', 20000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="cemilan">
+                    <div class="item-img" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6gBi8yGaSisqoTf1jj_T-TPJQvlhDUrcY9kgNM4twagaW6vMx0SFEKQA&s=10')"></div>
+                    <div class="item-info"><h3>Onion Rings</h3><p class="price">Rp 18.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Onion Rings', 18000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="cemilan">
+                    <div class="item-img" style="background-image: url('https://www.dapurkobe.co.id/wp-content/uploads/fire-chicken-wings.jpg')"></div>
+                    <div class="item-info"><h3>Chicken Wings</h3><p class="price">Rp 30.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Chicken Wings', 30000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="cemilan">
+                    <div class="item-img" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTyFIbw8QfrJ8hUzi_NZu07iafplKjoYmGvgI5JML8NXRztPHUb6xswE4&s=10')"></div>
+                    <div class="item-info"><h3>Nachos Cheese</h3><p class="price">Rp 25.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Nachos Cheese', 25000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="cemilan">
+                    <div class="item-img" style="background-image: url('https://mymorningmocha.com/wp-content/uploads/2023/09/croffle-recipe.jpg')"></div>
+                    <div class="item-info"><h3>Crispy Croffle</h3><p class="price">Rp 22.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Crispy Croffle', 22000)">Pesan</button></div>
+                </div>
+                <div class="glass-card menu-item card-anim" data-category="cemilan">
+                    <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500')"></div>
+                    <div class="item-info"><h3>Choco Cookies</h3><p class="price">Rp 12.000</p><button class="checkout-btn btn-anim" onclick="openCheckout('Choco Cookies', 12000)">Pesan</button></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="glass-card modal-content modal-anim">
+            <h2 id="modalTitle"></h2>
+            <div id="modalBody"></div>
+            <button class="btn-primary btn-anim" onclick="closePopup()">Tutup</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="failModal" style="z-index: 200002;">
+        <div class="glass-card modal-content modal-anim" style="border-color: #ff4d4d;">
+            <i class="fas fa-times-circle" style="font-size: 4rem; color: #ff4d4d; margin-bottom: 15px;"></i>
+            <h2 style="color: #ff4d4d;">Pembayaran Gagal</h2>
+            <p id="failMsg" style="margin: 15px 0; opacity: 0.8;">Anda belum mengunggah bukti pembayaran QRIS.</p>
+            <button class="btn-primary btn-anim" onclick="closeFailModal()" style="background: #ff4d4d; color: white;">Coba Lagi</button>
+        </div>
+    </div>
+
+    <script>
+/* ============================================================
+   CAFERIA ULTIMATE SYSTEM - FINAL ALL-IN-ONE REPAIR
+   (Fix Promo + Welcome + Keranjang + Qty + QRIS + History)
+   ============================================================ */
+
+let purchaseHistory = [];
+let cart = [];
+let selectedPayment = 'cash'; 
+let cartPaymentMethod = 'cash'; 
+let promoActive = false;
+let currentUser = null;
+
+const sidebar = document.getElementById('sidebar');
+const modal = document.getElementById('modalOverlay');
+const failModal = document.getElementById('failModal');
+
+// --- 1. CORE FUNCTIONS & NAVIGATION ---
+function showToast(msg, icon) {
+    const t = document.getElementById('toast');
+    if (t) {
+        t.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+}
+
+function enterHome() {
+    const welcome = document.getElementById('welcomeScreen');
+    if (welcome) {
+        welcome.classList.add('hide');
+        showToast("Selamat Datang di Caferia", "fa-mug-hot");
+    }
+}
+
+if (document.getElementById('menuBtn')) {
+    document.getElementById('menuBtn').onclick = () => sidebar.classList.add('active');
+}
+if (document.getElementById('closeBtn')) {
+    document.getElementById('closeBtn').onclick = () => sidebar.classList.remove('active');
+}
+
+function getEst(name) {
+    const isFood = ['Pizza', 'Bowl', 'Burger', 'Ribs', 'Salmon', 'Lasagna', 'Salad'].some(x => name.includes(x));
+    return isFood ? "15-20 Menit" : "5-10 Menit";
+}
+
+function filterMenu(cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.toggle('active', b.innerText.toLowerCase() === cat || (cat === 'all' && b.innerText === 'Semua'));
+    });
+    document.querySelectorAll('.menu-item').forEach(i => {
+        i.style.display = (cat === 'all' || i.dataset.category === cat) ? 'block' : 'none';
+    });
+}
+
+// --- 2. SINGLE CHECKOUT & QTY LOGIC ---
+function openCheckout(name, priceRaw) {
+    selectedPayment = 'cash'; 
+    const est = getEst(name);
+    let finalPrice = promoActive ? priceRaw * 0.8 : priceRaw;
+
+    document.getElementById('modalTitle').innerText = "Konfirmasi Pesanan";
+    document.getElementById('modalBody').innerHTML = `
+        <div style="text-align: left; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid var(--primary);">
+            <p><b>Menu:</b> <b id="currentMenuName">${name}</b></p>
+            <div id="promoNotice">${promoActive ? '<p style="color:var(--success); font-size:12px; font-weight:bold;"><i class="fas fa-tag"></i> Diskon Promo 20% Aktif</p>' : ''}</div>
+            
+            <div id="qtyContainer" style="display:flex; align-items:center; gap:15px; margin: 15px 0; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                <span style="font-size: 14px; opacity: 0.8;">Jumlah:</span>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button onclick="updateQty(-1, ${priceRaw})" class="btn-anim" style="width:30px; height:30px; border-radius:50%; border:1px solid var(--primary); background:transparent; color:white;">-</button>
+                    <span id="qtyDisplay" style="font-weight:bold; min-width:20px; text-align:center;">1</span>
+                    <button onclick="updateQty(1, ${priceRaw})" class="btn-anim" style="width:30px; height:30px; border-radius:50%; border:1px solid var(--primary); background:var(--primary); color:black;">+</button>
+                </div>
+            </div>
+
+            <input type="number" id="tableNum" placeholder="Nomor Meja (Wajib)" style="width:100%; padding:12px; margin:15px 0; background:rgba(255,255,255,0.1); border:1px solid var(--primary); color:white; border-radius:8px; outline:none;">
+            
+            <div class="payment-methods" style="display:flex; gap:10px;">
+                <div class="method-card active btn-anim" id="payCash" onclick="selectPayment('cash')" style="flex:1; padding:10px; border:1px solid var(--primary); border-radius:10px; text-align:center; cursor:pointer; background:rgba(212,163,115,0.2);">Cash</div>
+                <div class="method-card btn-anim" id="payQris" onclick="selectPayment('qris')" style="flex:1; padding:10px; border:1px solid rgba(255,255,255,0.2); border-radius:10px; text-align:center; cursor:pointer;">QRIS</div>
+            </div>
+            
+            <div id="qrisArea" style="text-align:center; display:none; margin-top:15px; background:white; padding:15px; border-radius:12px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CAFERIA" style="width:120px; margin-bottom:10px;">
+                <br><input type="file" id="proofUpload" style="font-size:11px; color:black;">
+            </div>
+            
+            <p style="color:var(--success); font-size:13px; margin-top:10px;"><i class="fas fa-clock"></i> Estimasi: ${est}</p>
+            <p id="totalPriceDisplay" style="color:var(--primary); font-size:1.5rem; font-weight:bold; margin-top:10px;">Total: Rp ${finalPrice.toLocaleString()}</p>
+        </div>
+        
+        <button class="checkout-btn btn-anim" onclick="confirmOrder('${name}', '${finalPrice.toLocaleString()}')" style="width:100%; margin-top:15px;">Pesan Sekarang</button>
+        <button id="addToCartBtn" class="btn-primary btn-anim" style="background: var(--success) !important; color: white !important; margin-top: 10px; width: 100%; border:none; padding:12px; border-radius:12px; font-weight:bold;" onclick="handleAddCart('${name}', ${priceRaw})">
+            <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+        </button>
+    `;
+    modal.style.display = 'flex';
+}
+
+function updateQty(change, unitPrice) {
+    const display = document.getElementById('qtyDisplay');
+    const priceDisplay = document.getElementById('totalPriceDisplay');
+    const menuName = document.getElementById('currentMenuName').innerText;
+
+    let currentQty = parseInt(display.innerText) + change;
+    if (currentQty < 1) currentQty = 1;
+    display.innerText = currentQty;
+
+    let finalPrice = (promoActive ? unitPrice * 0.8 : unitPrice) * currentQty;
+    priceDisplay.innerText = `Total: Rp ${finalPrice.toLocaleString()}`;
+    document.querySelector('.checkout-btn').setAttribute('onclick', `confirmOrder('${currentQty}x ${menuName}', '${finalPrice.toLocaleString()}')`);
+}
+
+function selectPayment(m) {
+    selectedPayment = m;
+    const isCash = m === 'cash';
+    document.getElementById('payCash').style.background = isCash ? 'rgba(212,163,115,0.2)' : 'transparent';
+    document.getElementById('payQris').style.background = !isCash ? 'rgba(212,163,115,0.2)' : 'transparent';
+    document.getElementById('qrisArea').style.display = isCash ? 'none' : 'block';
+}
+
+function confirmOrder(n, p) {
+    const t = document.getElementById('tableNum')?.value.trim();
+    if(!t) { showFailModal("Pesanan Gagal! Harap isi nomor meja Anda."); return; }
+    
+    if(selectedPayment === 'qris' && !document.getElementById('proofUpload').files[0]) {
+        showFailModal("Harap unggah bukti pembayaran QRIS.");
+        return;
+    }
+    purchaseHistory.push({n, p, t, time: new Date().toLocaleTimeString()});
+    showToast("Pesanan Berhasil!", "fa-check-circle");
+    closePopup();
+}
+
+// --- 3. CART SYSTEM ---
+function handleAddCart(name, price) {
+    const qty = parseInt(document.getElementById('qtyDisplay').innerText);
+    const total = (promoActive ? price * 0.8 : price) * qty;
+    cart.push({ name, price: total, qty });
+    updateCartUI();
+    closePopup();
+    showToast(`${qty}x ${name} masuk keranjang`, "fa-cart-plus");
+}
+
+function updateCartUI() {
+    const count = cart.length;
+    const countEl = document.getElementById('cartCount');
+    const floatEl = document.getElementById('cartFloat');
+    if(countEl) countEl.innerText = count;
+    if(floatEl) floatEl.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function openCartModal() {
+    document.getElementById('modalTitle').innerText = "Keranjang Belanja";
+    let html = '';
+    let grandTotal = 0;
+    cart.forEach((item, index) => {
+        grandTotal += item.price;
+        html += `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                <div style="text-align:left;"><b>${item.qty}x ${item.name}</b><br><small>Rp ${item.price.toLocaleString()}</small></div>
+                <button onclick="removeFromCart(${index})" style="background:none; border:none; color:#ff4d4d;"><i class="fas fa-trash"></i></button>
+            </div>`;
+    });
+    html += `
+        <div style="margin-top:15px; padding:15px; background:rgba(255,255,255,0.05); border-radius:10px;">
+            <p style="font-weight:bold; font-size:1.2rem;">Total: Rp ${grandTotal.toLocaleString()}</p>
+            <div class="payment-methods" style="display:flex; gap:10px; margin:10px 0;">
+                <div class="method-card active" id="cartPayCash" onclick="selectCartPay('cash')" style="flex:1; padding:10px; border:1px solid var(--primary); border-radius:10px; cursor:pointer;">Cash</div>
+                <div class="method-card" id="cartPayQris" onclick="selectCartPay('qris')" style="flex:1; padding:10px; border:1px solid rgba(255,255,255,0.2); border-radius:10px; cursor:pointer;">QRIS</div>
+            </div>
+            <div id="cartQrisArea" style="display:none; text-align:center; background:white; padding:10px; border-radius:10px; margin-bottom:10px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CAFERIA_CART" style="width:100px;"><br>
+                <input type="file" id="cartProofUpload" style="font-size:10px; color:black;">
+            </div>
+            <input type="number" id="cartTableNum" placeholder="Nomor Meja (Wajib)" style="width:100%; padding:12px; background:rgba(255,255,255,0.1); border:1px solid var(--primary); color:white; border-radius:8px; margin-bottom:15px;">
+            <button class="checkout-btn btn-anim" onclick="checkoutAll('${grandTotal.toLocaleString()}')" style="width:100%;">PESAN SEMUA</button>
+        </div>`;
+    document.getElementById('modalBody').innerHTML = html;
+    modal.style.display = 'flex';
+}
+
+function selectCartPay(m) {
+    cartPaymentMethod = m;
+    const isCash = m === 'cash';
+    document.getElementById('cartPayCash').style.background = isCash ? 'rgba(212,163,115,0.2)' : 'transparent';
+    document.getElementById('cartPayQris').style.background = !isCash ? 'rgba(212,163,115,0.2)' : 'transparent';
+    document.getElementById('cartQrisArea').style.display = isCash ? 'none' : 'block';
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    cart.length === 0 ? closePopup() : openCartModal();
+    updateCartUI();
+}
+
+function checkoutAll(total) {
+    const tableValue = document.getElementById('cartTableNum').value.trim();
+    if(!tableValue) { showFailModal("Isi nomor meja!"); return; }
+    if(cartPaymentMethod === 'qris' && !document.getElementById('cartProofUpload').files[0]) {
+        showFailModal("Upload bukti QRIS!");
+        return;
+    }
+    const names = cart.map(i => `${i.qty}x ${i.name}`).join(", ");
+    purchaseHistory.push({ n: names, p: total, t: tableValue, time: new Date().toLocaleTimeString() });
+    cart = []; updateCartUI(); closePopup(); showToast("Keranjang Berhasil Dipesan!", "fa-check-double");
+}
+
+// --- 4. PROMO SYSTEM ---
+function showPromo() {
+    sidebar.classList.remove('active');
+    document.getElementById('modalTitle').innerText = "Special Offers";
+    document.getElementById('modalBody').innerHTML = `
+        <div class="card-anim" style="background: linear-gradient(135deg, #d4a373 0%, #b38659 100%); padding: 30px 20px; border-radius: 20px; color: #000; text-align: center;">
+            <i class="fas fa-ticket-alt" style="font-size: 3rem;"></i>
+            <h3 style="font-weight: 800;">DISKON 20%</h3>
+            <p>Berlaku untuk semua menu!</p>
+            <div style="background: rgba(0,0,0,0.1); border: 2px dashed rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; font-family: monospace; font-size: 1.2rem; font-weight: bold; margin: 15px 0;">CAFERIAHEPI</div>
+            <button class="btn-anim" onclick="activatePromo()" style="background: #000; color: #fff; border: none; padding: 12px 40px; border-radius: 12px; font-weight: 800; width: 100%;">KLAIM DISKON</button>
+        </div>
+    `;
+    modal.style.display = 'flex';
+}
+
+function activatePromo() {
+    promoActive = true;
+    closePopup();
+    showToast('Promo Diskon 20% Berhasil Diklaim!', 'fa-percentage');
+}
+
+// --- 5. HISTORY WITH ESTIMATION ---
+function showHistory() {
+    sidebar.classList.remove('active');
+    document.getElementById('modalTitle').innerText = "Riwayat Pesanan";
+    let h = purchaseHistory.length ? '' : '<p style="opacity:0.7; text-align:center; padding:20px;">Belum ada pesanan.</p>';
+    
+    purchaseHistory.slice().reverse().forEach(i => {
+        const estTime = getEst(i.n); 
+        h += `
+        <div style="text-align:left; border-bottom:1px solid rgba(255,255,255,0.1); padding:15px; margin-bottom:12px; border-radius:15px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div>
+                    <b style="color: var(--primary); font-size: 1.1rem; display:block; margin-bottom:4px;">${i.n}</b>
+                    <small style="opacity: 0.7; display:block; margin-bottom:8px;">
+                        <i class="fas fa-map-marker-alt"></i> Meja ${i.t} &nbsp;•&nbsp; <i class="fas fa-clock"></i> ${i.time}
+                    </small>
+                </div>
+                <span style="background:var(--primary); color:black; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:bold;">DIPROSES</span>
+            </div>
+            <div style="margin-top: 5px; padding: 8px 12px; background: rgba(37, 211, 102, 0.1); border-left: 4px solid var(--success); border-radius: 8px;">
+                <div style="color: var(--success); font-weight: 600; font-size: 0.85rem;"><i class="fas fa-shipping-fast"></i> Estimasi Sampai:</div>
+                <div style="color: #fff; font-size: 0.9rem; margin-top: 2px;">Pesanan tiba dalam <span style="color:var(--primary); font-weight:bold;">${estTime}</span></div>
+            </div>
+        </div>`;
+    });
+    document.getElementById('modalBody').innerHTML = h;
+    modal.style.display = 'flex';
+}
+
+// --- 6. UI UTILITIES & MISC ---
+function showFailModal(msg) {
+    const fMsg = document.getElementById('failMsg') || document.getElementById('failMessage');
+    if(fMsg) fMsg.innerText = msg;
+    failModal.style.zIndex = "100001";
+    failModal.style.display = 'flex';
+}
+function closeFailModal() { failModal.style.display = 'none'; }
+function closePopup() { modal.style.display = 'none'; }
+function scrollToMenu() { document.getElementById('menu').scrollIntoView({behavior:'smooth'}); }
+function showCS() {
+    sidebar.classList.remove('active');
+    document.getElementById('modalTitle').innerText = "Customer Service";
+    document.getElementById('modalBody').innerHTML = `<div style="text-align:center; padding:20px;"><i class="fas fa-headset" style="font-size:3rem; color:var(--primary);"></i><p style="margin-top:15px;">WA: +62 812-3456-7890<br>Email: support@caferia.com</p></div>`;
+    modal.style.display = 'flex';
+}
+
+function openProfile() {
+    document.getElementById('modalTitle').innerText = currentUser ? "Profil" : "Login";
+    if (!currentUser) {
+        document.getElementById('modalBody').innerHTML = `
+            <input type="text" id="userInputName" placeholder="Nama..." style="width:100%; padding:12px; background:rgba(255,255,255,0.1); border:1px solid var(--primary); color:white; border-radius:8px;">
+            <button class="btn-primary btn-anim" style="width:100%; margin-top:15px;" onclick="handleLogin()">Masuk</button>`;
+    } else {
+        document.getElementById('modalBody').innerHTML = `<div style="text-align:center;"><i class="fas fa-user-circle" style="font-size:4rem; color:var(--primary);"></i><h2>${currentUser}</h2><button class="btn-primary" style="background:#ff4d4d; border:none; margin-top:15px;" onclick="confirmLogout()">Logout</button></div>`;
+    }
+    modal.style.display = 'flex';
+}
+
+function handleLogin() {
+    const n = document.getElementById('userInputName').value;
+    if(!n) return alert("Isi nama!");
+    currentUser = n; closePopup(); showToast(`Halo, ${n}!`, "fa-user-check");
+}
+
+function confirmLogout() { currentUser = null; closePopup(); showToast("Logged Out", "fa-sign-out-alt"); }
+
+window.onclick = (e) => { 
+    if (e.target == modal) closePopup(); 
+    if (e.target == failModal) closeFailModal();
+};
+
+// --- INITIALIZE FLOATING CART ---
+(function() {
+    if(!document.getElementById('cartFloat')) {
+        const cartBtn = document.createElement('div');
+        cartBtn.id = 'cartFloat';
+        cartBtn.style.cssText = "position: fixed; bottom: 30px; right: 30px; background: var(--primary); width: 60px; height: 60px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 24px; color: black; cursor: pointer; z-index: 10000; box-shadow: 0 5px 15px rgba(0,0,0,0.3);";
+        cartBtn.innerHTML = `<i class="fas fa-shopping-basket"></i><div id="cartCount" style="position: absolute; top: -5px; right: -5px; background: #ff4d4d; color: white; font-size: 11px; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">0</div>`;
+        cartBtn.onclick = openCartModal;
+        document.body.appendChild(cartBtn);
+    }
+})();
+</script>
+</body>
+</html>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
